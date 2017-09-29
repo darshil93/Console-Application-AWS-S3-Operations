@@ -19,14 +19,15 @@ namespace B2MAWS
         static string keyName;
         static string filePath;
         static IAmazonS3 client;
-        public UploadObject()
+        public UploadObject(string s)
         {
-            Console.WriteLine("Enter the Bucket Name");
-            bucketName = Console.ReadLine();
+            //Console.WriteLine("Enter the Bucket Name");
+            //bucketName = Console.ReadLine();
+            bucketName = "todayprosp";
             DateTime date = DateTime.ParseExact(DateTime.Today.ToString(), "M/d/yyyy h:m:s tt", System.Globalization.CultureInfo.InvariantCulture);
-            string formattedDate = date.ToString("yyyy-MM-dd") + "/csv1.csv";
+            string formattedDate = date.ToString("yyyy-MM-dd") + '/'+s;
             keyName = formattedDate;
-            filePath = GetAppSettings("filepath");
+            filePath = GetAppSettings("filepath")+s;
         }
 
         public static string GetAppSettings(string s)

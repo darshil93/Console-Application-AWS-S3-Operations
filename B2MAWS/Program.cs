@@ -23,6 +23,7 @@ namespace B2MAWS
             Console.WriteLine("Enter 2 : to create a bucket");
             Console.WriteLine("Enter 3 : to upload csv file");
             Console.WriteLine("Enter 4 : to run sql script file");
+            Console.WriteLine("Enter 5 : to list all script files");
             int value = 1;
             while (value > 0)
             {
@@ -37,13 +38,13 @@ namespace B2MAWS
                     case 2:
                         {  CreateBucket c = new CreateBucket(UploadObject.bucketName); CreateBucket.CheckAndCreateBucket(); break; }
                     case 3:
-                        { UploadObject u = new UploadObject(); UploadObject.Connection(); break; }
+                        { UploadObject u = new UploadObject("csv1.csv"); UploadObject.Connection(); break; }
                     case 4:
-                        {
-                            CSVParser.GetScript();
-                            break;
+                        { ListObjects.MainListObjects(); CSVParser.GetScript();       break; }
+                    case 5:
+                        { ListObjects.MainListObjects();
+                            List<string> ls = ListObjects.scriptslist; break;
                         }
-
                 }
             }
             //call the constructor

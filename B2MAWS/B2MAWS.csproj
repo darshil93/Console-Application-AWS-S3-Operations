@@ -71,6 +71,7 @@
     <Compile Include="CheckBucketExist.cs" />
     <Compile Include="CSVParser.cs" />
     <Compile Include="DownloadScripts.cs" />
+    <Compile Include="ListObjects.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="UploadObject.cs" />

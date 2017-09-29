@@ -12,7 +12,7 @@ namespace B2MAWS
 {
     class CSVParser
     {
-        static string sqlscript;
+        static List<string> sqlscript;
 
         public static void GetScript()
         {
@@ -38,31 +38,43 @@ namespace B2MAWS
                 rdr.Close(); con.Close();
             }
         }
-        public static void CreateCSV(string s)
+        public static void CreateCSV(List<string> s)
         {
-            string destinationFile= "csv1.csv";
+            int scriptno = -1;
+            foreach(var temp in s) {
+                scriptno++;
+                string destinationFile = DownloadScripts.keyName[scriptno] +".csv";
             string connectionString = ConfigurationManager.ConnectionStrings["DbConnection"].ConnectionString;
-            using (SqlConnection con = new SqlConnection(connectionString))
-            using (var command = new SqlCommand(s, con))
-            {
-                con.Open();
-                using (var reader = command.ExecuteReader())
-                using (var outFile = File.CreateText(destinationFile))
+                using (SqlConnection con = new SqlConnection(connectionString))
+                using (var command = new SqlCommand(temp, con))
                 {
-                    string[] columnNames = GetColumnNames(reader).ToArray();
-                    int numFields = columnNames.Length;
-                    outFile.WriteLine(string.Join("     ", columnNames));
-                    if (reader.HasRows)
+                    con.Open();
+                    try
                     {
-                        while (reader.Read())
+                        using (var reader = command.ExecuteReader())
+                        using (var outFile = File.CreateText(destinationFile))
                         {
-                            string[] columnValues =
-                                Enumerable.Range(0, numFields)
-                                          .Select(i => reader.GetValue(i).ToString())
-                                          .Select(field => string.Concat("\"", field.Replace("\"", "\"\""), "\""))
-                                          .ToArray();
-                            outFile.WriteLine(string.Join("     ", columnValues));
+                            string[] columnNames = GetColumnNames(reader).ToArray();
+                            int numFields = columnNames.Length;
+                            outFile.WriteLine(string.Join("     ", columnNames));
+                            if (reader.HasRows)
+                            {
+                                while (reader.Read())
+                                {
+                                    string[] columnValues =
+                                        Enumerable.Range(0, numFields)
+                                                  .Select(i => reader.GetValue(i).ToString())
+                                                  .Select(field => string.Concat("\"", field.Replace("\"", "\"\""), "\""))
+                                                  .ToArray();
+                                    outFile.WriteLine(string.Join("     ", columnValues));
+                                }
+                            }
                         }
+                        UploadObject u = new UploadObject(destinationFile); UploadObject.Connection();
+                    }
+                    catch
+                    {
+                        Console.WriteLine("Error in Sql Query {0}", destinationFile.Substring(0,destinationFile.Length-4));
                     }
                 }
             }

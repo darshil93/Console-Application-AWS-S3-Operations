@@ -12,15 +12,16 @@ namespace B2MAWS
     class DownloadScripts
     {
         static string bucketName = "sqlscriptsprosp";
-        static string keyName = "samplescript.sql";
+        //static string keyName = "samplescript.sql";
+        static public List<string> keyName = ListObjects.scriptslist;
         static IAmazonS3 client;
 
-        public static string GetObject()
+        public static List<string> GetObject()
         {
             try
             {
                 Console.WriteLine("Retrieving (GET) an object");
-                string data = ReadObjectData();
+                List<string> data = ReadObjectData();
                 return data;
             }
             catch (AmazonS3Exception s3Exception)
@@ -32,29 +33,35 @@ namespace B2MAWS
             return null;
         }
 
-        static string ReadObjectData()
+        static List<string> ReadObjectData()
         {
-            string responseBody = "";
-
-            using (client = new AmazonS3Client(Amazon.RegionEndpoint.USEast1))
+            List<string> responseBody = new List<string>();
+            //responseBody = "";
+            if (keyName.Count < 1) return null;
+            foreach (var i in keyName)
             {
-                GetObjectRequest request = new GetObjectRequest
+                using (client = new AmazonS3Client(Amazon.RegionEndpoint.USEast1))
                 {
-                    BucketName = bucketName,
-                    Key = keyName
-                };
+                    GetObjectRequest request = new GetObjectRequest
+                    {
+                        BucketName = bucketName,
+                        Key = i
+                    };
 
-                using (GetObjectResponse response = client.GetObject(request))
-                using (Stream responseStream = response.ResponseStream)
-                using (StreamReader reader = new StreamReader(responseStream))
-                {
-                    string title = response.Metadata["x-amz-meta-title"];
-                    Console.WriteLine("The object's title is {0}", title);
+                    using (GetObjectResponse response = client.GetObject(request))
+                    using (Stream responseStream = response.ResponseStream)
+                    using (StreamReader reader = new StreamReader(responseStream))
+                    {
+                        string title = response.Metadata["x-amz-meta-title"];
+                        string timestamp = response.LastModified.ToString();
+                        //Console.WriteLine("The object's title is {0}", title);
 
-                    responseBody = reader.ReadToEnd();
+                        responseBody.Add(reader.ReadToEnd());
+                    }
                 }
             }
-            return responseBody;
+                return responseBody;
+            
         }
     }
 }
