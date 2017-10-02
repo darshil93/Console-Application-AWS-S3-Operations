@@ -16,7 +16,7 @@ namespace B2MAWS
 
         public static void GetScript()
         {
-            DownloadScripts c = new DownloadScripts();
+            //DownloadScripts c = new DownloadScripts();
             sqlscript = DownloadScripts.GetObject();
             //RunSqlScript(sqlscript); 
             CreateCSV(sqlscript);
@@ -48,9 +48,10 @@ namespace B2MAWS
                 using (SqlConnection con = new SqlConnection(connectionString))
                 using (var command = new SqlCommand(temp, con))
                 {
-                    con.Open();
+                    
                     try
                     {
+                        con.Open();
                         using (var reader = command.ExecuteReader())
                         using (var outFile = File.CreateText(destinationFile))
                         {
@@ -70,7 +71,8 @@ namespace B2MAWS
                                 }
                             }
                         }
-                        UploadObject u = new UploadObject(destinationFile); UploadObject.Connection();
+                        UploadObject u = new UploadObject(destinationFile);
+                        UploadObject.Connection();
                     }
                     catch
                     {

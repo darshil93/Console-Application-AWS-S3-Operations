@@ -24,6 +24,8 @@ namespace B2MAWS
             Console.WriteLine("Enter 3 : to upload csv file");
             Console.WriteLine("Enter 4 : to run sql script file");
             Console.WriteLine("Enter 5 : to list all script files");
+            Console.WriteLine("Enter 6 : to download scripts locally");
+            Console.WriteLine("Enter 7 : to automate the process");
             int value = 1;
             while (value > 0)
             {
@@ -44,6 +46,19 @@ namespace B2MAWS
                     case 5:
                         { ListObjects.MainListObjects();
                             List<string> ls = ListObjects.scriptslist; break;
+                        }
+                    case 6:
+                        {
+                            ListObjects.MainListObjects();
+                            DownloadScripts.DownloadAllScripts();
+                            break;
+                        }
+                    case 7:
+                        {
+                            ListObjects.MainListObjects(); // Gets list of objects from Bucket
+                            DownloadScripts.DownloadAllScripts();// Checks and downloads if scripts not present locally
+                            CSVParser.GetScript(); //Runs sql query and calls uploadobject.cs to upload csv
+                            break;
                         }
                 }
             }

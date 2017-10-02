@@ -60,8 +60,40 @@ namespace B2MAWS
                     }
                 }
             }
-                return responseBody;
-            
+            return responseBody;
+
+        }
+
+        public static void DownloadAllScripts()
+        {
+            IAmazonS3 client;
+            foreach (var i in keyName)
+            {
+                using (client = new AmazonS3Client(Amazon.RegionEndpoint.USEast1))
+                {
+                    GetObjectRequest request = new GetObjectRequest
+                    {
+                        BucketName = bucketName,
+                        Key = i
+                    };
+
+                    using (GetObjectResponse response = client.GetObject(request))
+                    {
+                        string dest = Path.Combine("C://Program Files//Prosperoware.Milan//SQL//", i);
+                        if (!File.Exists(dest))
+                        {
+                            response.WriteResponseStreamToFile(dest);
+                        }
+                        else
+                        {
+                            DateTime lastModified = System.IO.File.GetLastWriteTime(dest);
+                            if (response.LastModified > lastModified)
+                                response.WriteResponseStreamToFile(dest);
+                        }
+                    }
+                }
+            }
         }
     }
+
 }
