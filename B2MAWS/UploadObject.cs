@@ -23,7 +23,7 @@ namespace B2MAWS
         {
             //Console.WriteLine("Enter the Bucket Name");
             //bucketName = Console.ReadLine();
-            bucketName = "todayprosp";
+            bucketName = "milanprosp/client1/csvupload";
             DateTime date = DateTime.ParseExact(DateTime.Today.ToString(), "M/d/yyyy h:m:s tt", System.Globalization.CultureInfo.InvariantCulture);
             string formattedDate = date.ToString("yyyy-MM-dd") + '/'+s;
             keyName = formattedDate;

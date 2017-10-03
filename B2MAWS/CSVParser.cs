@@ -44,6 +44,7 @@ namespace B2MAWS
             foreach(var temp in s) {
                 scriptno++;
                 string destinationFile = DownloadScripts.keyName[scriptno] +".csv";
+                destinationFile = destinationFile.Replace("client1/sql/" ,"");
             string connectionString = ConfigurationManager.ConnectionStrings["DbConnection"].ConnectionString;
                 using (SqlConnection con = new SqlConnection(connectionString))
                 using (var command = new SqlCommand(temp, con))

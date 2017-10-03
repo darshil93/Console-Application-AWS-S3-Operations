@@ -11,7 +11,7 @@ namespace B2MAWS
     class ListObjects
     {
 
-        static string bucketName = "sqlscriptsprosp";
+        static string bucketName = "milanprosp";
         public static List<string> scriptslist = new List<string>();
         static IAmazonS3 client;
 
@@ -34,7 +34,10 @@ namespace B2MAWS
                 ListObjectsV2Request request = new ListObjectsV2Request
                 {
                     BucketName = bucketName,
-                    MaxKeys = 10
+                    //MaxKeys = 10,
+                    Prefix="client1/sql/",
+                    Delimiter="/"
+                    
                 };
                 ListObjectsV2Response response;
                 do
@@ -48,6 +51,7 @@ namespace B2MAWS
                         //    entry.Key, entry.Size);
                         scriptslist.Add(entry.Key);
                     }
+                    scriptslist.RemoveAt(0);
                     Console.WriteLine("Next Continuation Token: {0}", response.NextContinuationToken);
                     request.ContinuationToken = response.NextContinuationToken;
                 } while (response.IsTruncated == true);

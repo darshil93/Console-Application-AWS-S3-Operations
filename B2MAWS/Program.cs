@@ -19,7 +19,6 @@ namespace B2MAWS
     {
         static void Main(string[] args)
         {
-
             Console.WriteLine("Enter 1 : to check if bucket exists");
             Console.WriteLine("Enter 2 : to create a bucket");
             Console.WriteLine("Enter 3 : to upload csv file");

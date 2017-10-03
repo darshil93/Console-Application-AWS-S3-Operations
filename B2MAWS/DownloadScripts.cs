@@ -11,7 +11,7 @@ namespace B2MAWS
 {
     class DownloadScripts
     {
-        static string bucketName = "sqlscriptsprosp";
+        static string bucketName = "milanprosp";
         //static string keyName = "samplescript.sql";
         static public List<string> keyName = ListObjects.scriptslist;
         static IAmazonS3 client;
@@ -79,7 +79,7 @@ namespace B2MAWS
 
                     using (GetObjectResponse response = client.GetObject(request))
                     {
-                        string dest = Path.Combine("C://Program Files//Prosperoware.Milan//SQL//", i);
+                        string dest = Path.Combine("C:/Program Files/Prosperoware.Milan/", i);
                         if (!File.Exists(dest))
                         {
                             response.WriteResponseStreamToFile(dest);
